@@ -1,5 +1,6 @@
 import SwiftUI
-import LinkKit
+// TODO: Uncomment after adding Plaid SDK
+// import LinkKit
 
 class PlaidService: ObservableObject {
     @Published var isLinking = false
@@ -11,6 +12,14 @@ class PlaidService: ObservableObject {
         // TODO: Replace with your link token from Plaid Dashboard
         let linkToken = "link-sandbox-YOUR-TOKEN-HERE" // Temporary!
         
+        print("⚠️ Plaid SDK not yet added. To enable:")
+        print("1. File → Add Package Dependencies")
+        print("2. Add: https://github.com/plaid/plaid-link-ios")
+        print("3. Uncomment the import LinkKit line above")
+        print("4. Uncomment the Plaid code below")
+        
+        // TODO: Uncomment this entire block after adding Plaid SDK
+        /*
         var configuration = LinkTokenConfiguration(
             token: linkToken,
             onSuccess: { success in
@@ -46,5 +55,6 @@ class PlaidService: ObservableObject {
         case .failure(let error):
             print("❌ Failed to create Plaid handler: \(error)")
         }
+        */
     }
 } 
