@@ -30,6 +30,64 @@
 
 ---
 
+## 📋 NEW FEATURE ANALYSIS: Solana Wallet Integration
+
+### Feature: Solana Wallet Balance Tracking
+**User Story**: As a crypto investor, I want to paste my Solana wallet address so that I can see my SOL and token balances automatically
+
+**Analysis**:
+- Current pain point: Manually tracking SOL + SPL tokens across wallets
+- Proposed solution: Paste address → fetch all balances from blockchain
+- Complexity: Medium (need RPC endpoint + token parsing)
+- Time estimate: 4-6 hours for MVP
+
+**Success Criteria**:
+- [x] User can paste Solana wallet address
+- [x] App fetches SOL balance
+- [x] App fetches top SPL tokens
+- [x] Values update on refresh
+- [x] Shows USD values
+
+**Implementation Tasks**:
+1. Create SolanaService.swift (1 hour)
+   - Setup Helius/QuickNode RPC endpoint
+   - Implement getBalance for SOL
+   - Implement getTokenAccounts for SPL tokens
+
+2. Create AddSolanaWalletView.swift (1 hour)
+   - Text field for wallet address
+   - Validation (58 character base58)
+   - Loading state while fetching
+
+3. Integrate token price data (2 hours)
+   - Use CoinGecko for SOL price
+   - Get token prices for major SPL tokens
+   - Calculate USD values
+
+4. Update Asset model (0.5 hours)
+   - Add wallet address field
+   - Add token metadata support
+   - Support for multiple tokens per wallet
+
+5. Testing with real wallets (0.5 hours)
+   - Test with known wallets
+   - Handle edge cases (empty wallets, invalid addresses)
+
+**Risks/Concerns**:
+- RPC rate limits (use free tier carefully)
+- Token price data availability
+- Need to handle thousands of possible SPL tokens
+
+**Decision**: PROCEED - High value feature that demonstrates automatic aggregation
+
+**MVP Approach**:
+- Start with just SOL balance
+- Add top 10 SPL tokens (USDC, USDT, etc.)
+- Use free Helius RPC endpoint
+- Expand token support later
+
+---
+
 ## 📊 Current State (v1.0)
 
 ### ✅ Completed Features
@@ -42,6 +100,7 @@
 - [x] Sample data for demo
 - [x] Clean, modern UI
 - [x] Basic Plaid integration structure
+- [x] App runs without PlaidService (commented out)
 
 ### 🏗️ Architecture Decisions
 - **UI Framework**: SwiftUI (modern, declarative)
@@ -69,17 +128,18 @@
 ### Priority 2: Crypto Wallet Integration (Solves 30% of problem)
 **Goal**: Wallet address → automatic balance
 
-**Success Criteria**:
+#### 2a: Solana Wallet Support (NEW - In Progress)
+- [ ] Paste Solana address
+- [ ] Fetch SOL balance
+- [ ] Fetch major SPL tokens
+- [ ] Show USD values
+- [ ] Auto-refresh on app launch
+
+#### 2b: Ethereum Wallet Support (Next)
 - [ ] Add wallet by address
 - [ ] Auto-fetch ETH balance
 - [ ] Support top 5 tokens (USDT, USDC, etc)
 - [ ] Update on app launch
-
-**Implementation**:
-1. Create EtherscanService.swift
-2. Add wallet address input
-3. Fetch balances via Etherscan API
-4. Store addresses securely
 
 ### Priority 3: Real-Time Price Updates
 **Goal**: Make it "always right"
@@ -181,7 +241,7 @@ Required endpoints:
 
 **Ship when a user can:**
 1. Connect 1 bank account (Plaid) ✅
-2. Add 1 crypto wallet (address → balance) ✅
+2. Add 1 crypto wallet (address → balance) ✅ ← Working on this!
 3. Add 1 manual investment ✅
 4. See accurate, auto-updating total ✅
 
@@ -200,6 +260,12 @@ This difference - manual vs automatic - is EVERYTHING.
 - [x] Add Plaid to project structure
 - [ ] See Link interface open
 - [ ] Get success callback with public token
+
+### This Week: Solana Integration
+- [ ] Day 1: Create SolanaService
+- [ ] Day 2: Add wallet UI
+- [ ] Day 3: Integrate price data
+- [ ] Day 4: Testing & polish
 
 ### Week 1: Plaid Integration
 - Day 1-2: Basic Link flow ← WE ARE HERE
@@ -247,11 +313,12 @@ This difference - manual vs automatic - is EVERYTHING.
 - [ ] ~~Asset detail view~~ (Deprioritized)
 - [x] Plaid integration structure
 - [ ] See Plaid Link open (TODAY'S GOAL)
+- [ ] Solana wallet integration (NEW)
 
 ### Week 2 (Planned)
 - [ ] Firebase backend setup
 - [ ] Token exchange implementation
-- [ ] Crypto wallet integration
+- [ ] Complete crypto wallet integration
 - [ ] Real-time price updates
 
 ### Week 3 (Planned)
@@ -264,8 +331,9 @@ This difference - manual vs automatic - is EVERYTHING.
 
 ### API Keys Needed
 - [ ] Plaid (banking) - Need to create account
+- [ ] Helius/QuickNode (Solana RPC) - Free tier available
+- [ ] CoinGecko (crypto prices) - Free tier available
 - [ ] Etherscan (wallet balances)
-- [ ] CoinGecko (crypto prices)
 - [ ] Alpha Vantage (stock prices)
 
 ### Backend Requirements
@@ -280,6 +348,8 @@ This difference - manual vs automatic - is EVERYTHING.
 - [ ] Token expiration handling
 - [ ] Network failure scenarios
 - [ ] Security audit
+- [ ] Solana wallet validation
+- [ ] Empty wallet handling
 
 ## 📝 Quick Decision Framework
 
@@ -292,6 +362,6 @@ For any feature request, ask:
 ---
 
 **Last Updated**: [Current Date]
-**Next Review**: After Plaid Link successfully opens
+**Next Review**: After Solana integration complete
 
 Remember: We're not building a portfolio tracker. We're building an automatic net worth aggregator. Manual entry is a fallback, not the feature. 
